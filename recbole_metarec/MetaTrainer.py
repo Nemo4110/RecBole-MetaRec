@@ -72,7 +72,9 @@ class MetaTrainer(Trainer):
                     if self.gpu_available and show_progress:
                         iter_data.set_postfix_str(set_color('GPU RAM: ' + get_gpu_usage(self.device), 'yellow'))
 
-                    self.eval_collector.eval_collect(scores,label)
+                    # MetaDataLoader OR taskDesolve OR MetaTrainer.evaluate的squeeze
+                    # 在处理到最后batch时，会产生0维度tensor
+                    self.eval_collector.eval_collect(scores.view(-1),label.view(-1))
 
             struct = self.eval_collector.get_data_struct()
             result = self.evaluator.evaluate(struct)
