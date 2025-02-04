@@ -14,7 +14,7 @@ user_inter_num_interval: [13,100]
 seed: 1128
 epochs: 50
 train_batch_size: 32
-valid_metric: rmse
+valid_metric: auc
 
 # Evaluate config
 eval_args:
@@ -37,6 +37,6 @@ melu_args:
 
 # Metrics
 # metrics: ['precision','recall','hit','ndcg']
-metrics: ['rmse']
+metrics: ['rmse', 'auc']
 metric_decimal_place: 4
 topk: 5

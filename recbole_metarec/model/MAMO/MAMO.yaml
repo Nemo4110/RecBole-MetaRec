@@ -1,11 +1,11 @@
 # Dataset config
 USER_ID_FIELD: user_id
 ITEM_ID_FIELD: item_id
-# RATING_FIELD: rating
-RATING_FIELD: label
+RATING_FIELD: rating
+# RATING_FIELD: label
 load_col:
     # inter: [user_id, item_id, rating]
-    inter: [user_id, item_id, label]
+    inter: [user_id, item_id, rating]
     item: [item_id,movie_title,release_year,class]
     user: [user_id,age,gender,occupation,zip_code]
 user_inter_num_interval: [13,100]
@@ -14,7 +14,7 @@ user_inter_num_interval: [13,100]
 seed: 1128
 epochs: 50
 train_batch_size: 32
-valid_metric: rmse
+valid_metric: auc
 
 # Evaluate config
 eval_args:
@@ -41,6 +41,6 @@ layerNum: 2
 
 # Metrics
 # metrics: ['precision','recall','hit','ndcg']
-metrics: ['rmse']
+metrics: ['rmse', 'auc']
 metric_decimal_place: 4
 topk: 5

@@ -7,6 +7,7 @@ recbole.MetaModule.MetaUtils
 ##########################
 """
 import importlib
+import sys
 from collections import OrderedDict
 import os,pickle
 
@@ -323,7 +324,10 @@ class MetaParams():
 
 def metaQuickStart(modelName,datasetName):
     if datasetName != 'book-crossing' and datasetName != 'book-crossing-CTR':
-        configPath = ['recbole_metarec/model/' + modelName + '/' + modelName + '.yaml']
+        if datasetName == 'mimic-iii-v1.4-drug-rec-Rating' or datasetName == 'mimic-iii-v1.4-drug-rec-CTR':
+            configPath = ['recbole_metarec/model/' + modelName + '/' + 'drug-rec.yaml']
+        else:
+            configPath = ['recbole_metarec/model/' + modelName + '/' + modelName + '.yaml']
     else:
         configPath = ['recbole_metarec/model/' + modelName + '/' + modelName + '-BK.yaml']
 
@@ -331,7 +335,7 @@ def metaQuickStart(modelName,datasetName):
         modelName + 'Trainer')
     modelClass = importlib.import_module('recbole_metarec.model.' + modelName + '.' + modelName).__getattribute__(modelName)
 
-    config = Config(model=modelClass, dataset=datasetName, config_file_list=configPath,config_dict={'data_path':'recbole_metarec/dataset/'})
+    config = Config(model=modelClass, dataset=datasetName, config_file_list=configPath, config_dict={'data_path':'recbole_metarec/dataset/'})
     init_seed(config['seed'], config['reproducibility'])
 
     # logger initialization
