@@ -1,7 +1,12 @@
-.idea
+.idea/
 recbole_metarec/saved
+recbole_metarec/dataset/mimic-iii-v1.4-drug-rec
+recbole_metarec/dataset/mimic-iii-v1.4-drug-rec-CTR
+recbole_metarec/dataset/mimic-iii-v1.4-drug-rec-Rating
 saved
 log
 log_tensorboard
 debug
 debug.py
+*.gitignore
+*.xml
