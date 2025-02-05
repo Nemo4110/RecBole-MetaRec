@@ -359,10 +359,10 @@ def metaQuickStart(modelName,datasetName):
     trainer = trainerClass(config, model)
 
     # model training
-    best_valid_score, best_valid_result = trainer.fit(train_data, valid_data)
+    best_valid_score, best_valid_result = trainer.fit(train_data, valid_data, show_progress=config['show_progress'])
 
     # model evaluation
-    test_result = trainer.evaluate(test_data)
+    test_result = trainer.evaluate(test_data, show_progress=config['show_progress'])
 
     logger.info('best valid result: {}'.format(best_valid_result))
     logger.info('test result: {}'.format(test_result))
