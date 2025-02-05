@@ -1,6 +1,6 @@
 from recbole_metarec.MetaUtils import metaQuickStart
 
-modelName, datasetName = 'MWUF', 'mimic-iii-v1.4-drug-rec-CTR'
+modelName, datasetName = 'LWA', 'mimic-iii-v1.4-drug-rec-CTR'
 metaQuickStart(modelName, datasetName)
 
 '''

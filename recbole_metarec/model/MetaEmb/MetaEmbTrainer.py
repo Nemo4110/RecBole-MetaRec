@@ -45,6 +45,24 @@ class MetaEmbTrainer(MetaTrainer):
 
     def _train_epoch(self, train_data, epoch_idx, loss_func=None, show_progress=False):
         self.model.train()
+
+        # PreTrain
+        if epoch_idx == 0:
+            for ep in range(self.config['pretrainEpoch']):
+                iter_data = (
+                    tqdm(
+                        train_data,
+                        total=len(train_data),
+                        ncols=100,
+                        desc=set_color(f"PreTrain {ep:>5}", 'pink'),
+                        leave=False,
+                    ) if show_progress else train_data
+                )
+                for batch_idx, taskBatch in enumerate(iter_data):
+                    taskBatch = [self.taskDesolve(task) for task in taskBatch]
+                    self.model.pretrain(taskBatch)
+
+        # Train
         iter_data = (
             tqdm(
                 train_data,
@@ -54,14 +72,6 @@ class MetaEmbTrainer(MetaTrainer):
             ) if show_progress else train_data
         )
         totalLoss=torch.tensor(0.0).to(self.config.final_config_dict['device'])
-        # PreTrain
-        if epoch_idx == 0:
-            for ep in range(self.config['pretrainEpoch']):
-                for batch_idx, taskBatch in enumerate(iter_data):
-                    taskBatch = [self.taskDesolve(task) for task in taskBatch]
-                    self.model.pretrain(taskBatch)
-
-        # Train
         for batch_idx, taskBatch in enumerate(iter_data):
             taskBatch = [self.taskDesolve(task) for task in taskBatch]
             loss, grad = self.model.calculate_loss(taskBatch)
