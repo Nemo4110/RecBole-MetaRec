@@ -123,6 +123,10 @@ class MWUF(MetaRecommender):
             avgItemVectors=torch.sum(allItemVectors,dim=0)/allItemVectors.shape[0]+torch.zeros(size=allItemVectors.shape).to(self.device)
             spt_shift=self.metaNets.shiftNet(avgItemVectors[:-10])
 
+            if spt_scale.dim() == 0:
+                spt_scale = spt_scale.expand_as(spt_userIndexCold)
+            if spt_shift.dim() == 0:
+                spt_shift = spt_shift.expand_as(spt_userIndexCold)
             spt_userIndexWarm=spt_userIndexCold*spt_scale+spt_shift
             predict_spt_warm_y=self.pretrainModel.f(spt_userIndexWarm,spt_x_user,spt_x_itemid, spt_x_item)
             spt_loss_warm = F.cross_entropy(predict_spt_warm_y, spt_y)
@@ -134,6 +138,10 @@ class MWUF(MetaRecommender):
             qrt_scale=self.metaNets.scaleNet(self.pretrainModel.f.userEmbedding.embeddingAllFields(qrt_x_user))
             qrt_shift=self.metaNets.shiftNet(avgItemVectors[-10:])
 
+            if qrt_scale.dim() == 0:
+                qrt_scale = qrt_scale.expand_as(qrt_userIndexCold)
+            if qrt_shift.dim() == 0:
+                qrt_shift = qrt_shift.expand_as(qrt_userIndexCold)
             qrt_userIndexWarm=qrt_userIndexCold*qrt_scale+qrt_shift
             predict_qrt_warm_y=self.pretrainModel.f(qrt_userIndexWarm,qrt_x_user,qrt_x_itemid, qrt_x_item)
             qrt_loss_warm=F.cross_entropy(predict_qrt_warm_y,qrt_y)
@@ -161,7 +169,10 @@ class MWUF(MetaRecommender):
         allItemVectors = torch.cat([self.pretrainModel.f.itemEmbedding.embeddingAllFields(spt_x_item),self.pretrainModel.f.itemEmbedding.embeddingAllFields(qrt_x_item)])
         avgItemVectors = torch.sum(allItemVectors, dim=0) / allItemVectors.shape[0] + torch.zeros(size=allItemVectors.shape).to(self.device)
         qrt_shift = self.metaNets.shiftNet(avgItemVectors[-10:])
-
+        if qrt_scale.dim() == 0:
+            qrt_scale = qrt_scale.expand_as(qrt_userIndexCold)
+        if qrt_shift.dim() == 0:
+            qrt_shift = qrt_shift.expand_as(qrt_userIndexCold)
         qrt_userIndexWarm = qrt_userIndexCold * qrt_scale + qrt_shift
         predict_qrt_warm_y = self.pretrainModel.f(qrt_userIndexWarm, qrt_x_user, qrt_x_itemid, qrt_x_item)[:,1]
 

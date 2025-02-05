@@ -33,7 +33,7 @@ normalize_all: False
 # Training and evaluation config
 seed: 1128
 epochs: 50
-train_batch_size: 32
+train_batch_size: 64
 valid_metric: AUC
 train_neg_sample_args:
   distribution: uniform
@@ -55,11 +55,10 @@ meta_args:
     query_num: 10
 
 # MWUF Parameters
-embedding_size: 10
-embedding: 10
+embedding: 32
 indexEmbDim: 8
 modelRecHiddenDim: 32
-pretrainEpoch: 20
+pretrainEpoch: 5
 pretrainLr: 0.0001
 scaleHiddenDim: 32
 shiftHiddenDim: 32
